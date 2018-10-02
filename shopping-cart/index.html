@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <style type="text/css">
+        .icon {
+            width: 1em; height: 1em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+        }
+    </style>
+    <body>
+        <style>
+            *{
+                padding: 0;
+                margin: 0;
+            }
+            a{
+                text-decoration: none;
+            }
+            h2{
+                text-align: center;
+                margin-top: 30px;
+            }
+            #app{
+                display: flex;
+                justify-content: center;
+                padding-top: 50px;
+            }
+            #shopping-cart{
+                width: 1200px;
+            }
+            #shopping-cart #header{
+                background-color: #6C6C6C;
+                display: flex;
+                font-size: 17px;
+                color: white;
+                padding: 15px 0px;
+            }
+            #shopping-cart #header .header-left{
+                width: 550px;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+            }
+            #shopping-cart #header .header-right{
+                display: flex;
+                flex-grow: 1;
+                justify-content: center;
+                align-items: center;
+            }
+            #shopping-cart #header .header-right div{
+                width:162px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+            }
+
+            #shopping-cart #main{}
+            #shopping-cart #main ul{}
+            #shopping-cart #main ul li{
+                display: flex;
+            }
+            #shopping-cart #main ul li:nth-child(even){
+                background-color: #ccc;
+            }
+
+            #shopping-cart #main ul li .goods_info{
+                width: 550px;
+                display: flex;
+                padding-top: 25px;
+                padding-left: 190px;
+            }
+            #shopping-cart #main ul li .goods_info svg{
+                margin-top: 50px;
+            }
+            #shopping-cart #main ul li .goods_info img{
+                margin-left: 30px;
+                width:120px;
+                height:120px;
+
+            }
+            #shopping-cart #main ul li .goods_info div{
+                margin-left: 30px;
+                padding-top: 18px;
+            }
+
+            #shopping-cart #main ul li .info_handle{
+                display: flex;
+                flex-grow: 1;
+                justify-content:center;
+                /*align-items: center;*/
+            }
+            #shopping-cart #main ul li .info_handle>div{
+                width: 162.5px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 165px;
+            }
+            #shopping-cart #main ul li .info_handle .price{
+            }
+            #shopping-cart #main ul li .info_handle .num{}
+            #shopping-cart #main ul li .info_handle .num input{
+                height: 22px;
+                width: 33px;
+                text-align: center;
+                border:1px solid #FBFBFB;
+            }
+
+            #shopping-cart #main ul li .info_handle .oneTotal{}
+            #shopping-cart #main ul li .info_handle .edit{}
+            #shopping-cart #main #handle{
+                display: flex;
+                height: 80px;
+                padding-top: 25px;
+                padding-left: 190px;
+            }
+            #shopping-cart #main #handle .handle-left{
+                display: flex;
+                width:50%;
+            }
+            #shopping-cart #main #handle .handle-right{
+                display: flex;
+                width: 50%;
+            }
+            #shopping-cart #main #handle{
+                display: flex;
+                height: 80px;
+                padding-top: 25px;
+                padding-left: 190px;
+            }
+            #handle .handle-left{
+                display: flex;
+                width:50%;
+                padding-top: 15px;
+            }
+            #handle .handle-left .chooseAll{
+                margin-left: 30px;
+            }
+            #handle .handle-left .chooseNone{
+                margin-left: 30px;
+
+            }
+            #handle .handle-right{
+                display: flex;
+                width: 50%;
+                justify-content: flex-end;
+                /*align-items: ;*/
+            }
+            #handle .handle-right .allCount{
+                width: 200px;
+                margin-top: 12px;
+            }
+            #handle .handle-right button{
+                width: 186px;
+                background-color: #E1374A;
+                padding: 2px;
+                height: 45px;
+            }
+        </style>
+        <h2>购物车</h2>
+        <div id="app">
+            <div id="shopping-cart">
+                <div id="header">
+                    <div class="header-left">
+                        商品信息
+                    </div>
+                    <div class="header-right">
+                        <div>商品金额</div>
+                        <div>商品数量</div>
+                        <div>总金额</div>
+                        <div>编辑</div>
+                    </div>
+                </div>
+                <div id="main">
+                    <ul>
+                        <li v-for="(item,index) in goods">
+                            <div class="goods_info">
+                                <svg class="icon" aria-hidden="true">
+                                    <use @click='chooseOne(index)' :xlink:href="item.Chosen?'#icon-open_icon_successx':'#icon-open_icon_successx-copy'"></use>
+                                </svg>
+                                <img :src="item.img_url" alt="">
+                                <div>{{item.goodsName}}</div>
+                            </div>
+                            <div class="info_handle">
+                                <div class="price">
+                                    ￥{{item.price.toFixed(2)}}
+                                </div>
+                                <div class="num">
+                                    <div class="minus" @click="minusNum(index)">-&nbsp;</div>
+                                    <input type="text" v-model="item.num">
+                                    <div class="plus" @click="plusNum(index)">&nbsp;+</div>
+                                </div>
+                                <div class="oneTotal">
+                                    {{item.price*item.num}}
+
+                                </div>
+                                <div class="edit">
+                                    <svg class="icon" aria-hidden="true" @click="removeItem(index)">
+                                        <use xlink:href="#icon-delete"></use>
+                                    </svg>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div id="handle">
+                        <div class="handle-left">
+                            <svg class="icon" aria-hidden="true" @click="chosenAll">
+                                <use :xlink:href="allChosen?'#icon-open_icon_successx':'#icon-open_icon_successx-copy'"></use>
+                            </svg>
+                            <div class="chooseAll" @click="chosenAll(true)">全选</div>
+                            <div class="chooseNone" @click="chosenAll(false)">取消全选</div>
+                        </div>
+                        <div class="handle-right">
+                            <div class="allCount">总计：{{payAll}}</div>
+                            <button>提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+
+    <script src="//at.alicdn.com/t/font_860421_ywr6lxlkokr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                allChosen:false,
+                goods:[
+                    {
+                        goodsName:"黄鹤楼香烟",
+                        img_url:"http://www.yanyue.cn/cache/imgdata/product/100x75/8f14b5c7ca9e871ac80fceffc2ce6627.jpg",
+                        price:19,
+                        num:2,
+                        Chosen:false,
+                    },
+                    {
+                        goodsName:"加多宝",
+                        img_url:'https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=866e385402fa513d51aa6bd8055632c6/314e251f95cad1c8b06751af753e6709c83d515d.jpg',
+                        price:8,
+                        num:5,
+                        Chosen:false,
+                    }
+                ]
+            },
+            computed:{
+                payAll(){
+                    let moneyAll = 0
+                    this.goods.forEach((item)=>{
+                        if(item.Chosen !== false){
+                            moneyAll += item.price * item.num
+
+                        }
+                    })
+                    return moneyAll
+                }
+            },
+            methods:{
+                removeItem(index){
+                    this.goods.splice(index,1)
+                },
+                minusNum(index){
+                    if(this.goods[index].num-- === 0){
+                        this.goods[index].num = 0
+                    }
+                },
+                plusNum(index){
+                    this.goods[index].num++
+
+                },
+                chooseOne(index){
+                    this.goods[index].Chosen = !this.goods[index].Chosen
+                },
+                chosenAll(flag){
+                    console.log(flag);
+                    let value
+                    if(typeof flag === 'object'){
+                        console.log(1);
+                        value  = !this.allChosen
+                    }else{
+                        console.log(2);
+                        value = flag
+                    }
+                    this.allChosen = value
+                    this.goods.forEach((item)=>{
+                        item.Chosen = value
+                    })
+                }
+            }
+        })
+    </script>
+</html>
